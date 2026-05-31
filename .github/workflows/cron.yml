@@ -1,4 +1,4 @@
-name: Trigger Autopost Agent
+name: Run Autopost Agent
 
 on:
   schedule:
@@ -6,13 +6,21 @@ on:
   workflow_dispatch:       # allow manual trigger from GitHub UI
 
 jobs:
-  trigger:
+  run:
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger Vercel function
-        run: |
-          curl -X POST https://${{ secrets.VERCEL_URL }}/api/run \
-            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
-            --fail \
-            --silent \
-            --show-error
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run agent
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+          FACEBOOK_PAGE_ID: ${{ secrets.FACEBOOK_PAGE_ID }}
+        run: python main.py
