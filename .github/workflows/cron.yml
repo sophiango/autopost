@@ -2,7 +2,7 @@ name: Run Autopost Agent
 
 on:
   schedule:
-    - cron: '0 * * * *'  # every hour
+    - cron: '0 9 * * *'  # every day at 9am UTC
   workflow_dispatch:       # allow manual trigger from GitHub UI
 
 jobs:
