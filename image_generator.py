@@ -10,7 +10,10 @@ SAFE_FALLBACK_SUFFIX = (
 )
 
 
-def generate_image(prompt: str, size: str = "1024x1024", save_dir: str = "images") -> str:
+_DEFAULT_SAVE_DIR = "/tmp/images" if os.environ.get("VERCEL") else "images"
+
+
+def generate_image(prompt: str, size: str = "1024x1024", save_dir: str = _DEFAULT_SAVE_DIR) -> str:
     os.makedirs(save_dir, exist_ok=True)
 
     def attempt(p: str) -> str:
